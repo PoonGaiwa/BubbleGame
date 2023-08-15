@@ -2,7 +2,7 @@
  * @Author: gaiwa gaiwa@163.com
  * @Date: 2023-08-11 16:47:07
  * @LastEditors: gaiwa gaiwa@163.com
- * @LastEditTime: 2023-08-15 13:31:43
+ * @LastEditTime: 2023-08-15 14:34:37
  * @FilePath: \html\work\js\game\js\game.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,7 +32,6 @@ function init(){
     for(let j=0; j<maxColumns - c; j++){
       let ele = document.createElement('div');
       ele.classList.add('ball');
-      // ele.innerText = idx;
       let left = size * (j + (i%2)/2);
       let top = (i * (size - (i && 6)));
       let color = randomColor();
@@ -105,7 +104,7 @@ oBallArea.addEventListener('mousedown',function(){
     return false;
   }
   let iAngle = Number(oArrow.style.transform.match(/rotate\((.+)deg\)/)?.[1]);
-  let timer, speed = 18, maxBallTop = maxRows * (size - 6);
+  let timer, speed = 18;
   let _speedX = speed;
   clearInterval(timer);
   timer = setInterval( () => {
@@ -120,6 +119,12 @@ oBallArea.addEventListener('mousedown',function(){
       if (targetIdx.length === 0){
         alert(`游戏结束!你的得分为${score}`);
         clearInterval(timer);
+        oStart.classList.remove('active');
+        ballsData.forEach(item=>item.ele.style.cssText = `display: none`);
+        initArrow();
+        initBullet();
+        score = 0;
+        oScore.innerText = score;
         return false;
       }
       hitTarget(targetIdx);
@@ -135,14 +140,13 @@ oBallArea.addEventListener('mousedown',function(){
 },false);
 
 oStart.addEventListener('click',function(e){
+  init();
   e.target.classList.add('active');
   gameCondition = e.target.className.includes('active');
   if(!gameCondition){
     return false;
   }
 },false);
-
-
 
 function findSiblings(idx = 0) {
   let { tens, units } = getDigit(idx);
